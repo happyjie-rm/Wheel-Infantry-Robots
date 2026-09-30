@@ -108,39 +108,39 @@
 			[
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Core/Inc"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Core/Inc"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/include"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Device/ST/STM32F4xx/Include"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Device/ST/STM32F4xx/Include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Include"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/ST/ARM/DSP/Inc"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/ST/ARM/DSP/Inc"
 				}
 			],
 			"language" : "C",
@@ -195,39 +195,39 @@
 			[
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Core/Inc"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Core/Inc"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/include"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Device/ST/STM32F4xx/Include"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Device/ST/STM32F4xx/Include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Include"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Drivers/CMSIS/Include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/ST/ARM/DSP/Inc"
+					"path" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/stm32cubemx/../../Middlewares/ST/ARM/DSP/Inc"
 				}
 			],
 			"language" : "ASM",
@@ -241,11 +241,11 @@
 	[
 		{
 			"backtrace" : 4,
-			"id" : "FreeRTOS::@768a070a0fe75716b479"
+			"id" : "STM32_Drivers::@768a070a0fe75716b479"
 		},
 		{
 			"backtrace" : 4,
-			"id" : "STM32_Drivers::@768a070a0fe75716b479"
+			"id" : "FreeRTOS::@768a070a0fe75716b479"
 		}
 	],
 	"id" : "jie_max::@6890427a1f51a3e7e1df",
@@ -258,12 +258,12 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard  -T \"E:/RM/RM_jie/Wheel-Infantry-Robots/STM32F405xx_FLASH.ld\" --specs=nano.specs -Wl,-Map=jie_max.map -Wl,--gc-sections -Wl,--print-memory-usage",
+				"fragment" : "-mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard  -T \"E:/RM/jie/Wheel-Infantry-Robots/STM32F405xx_FLASH.ld\" --specs=nano.specs -Wl,-Map=jie_max.map -Wl,--gc-sections -Wl,--print-memory-usage",
 				"role" : "flags"
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "-LE:\\RM\\RM_jie\\Wheel-Infantry-Robots\\cmake\\stm32cubemx\\..\\..\\Middlewares\\ST\\ARM\\DSP\\Lib",
+				"fragment" : "-LE:\\RM\\jie\\Wheel-Infantry-Robots\\cmake\\stm32cubemx\\..\\..\\Middlewares\\ST\\ARM\\DSP\\Lib",
 				"role" : "libraryPath"
 			},
 			{

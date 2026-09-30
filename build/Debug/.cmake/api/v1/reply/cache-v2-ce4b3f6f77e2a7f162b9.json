@@ -179,7 +179,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "e:/RM/RM_jie/Wheel-Infantry-Robots/build/Debug"
+			"value" : "e:/RM/jie/Wheel-Infantry-Robots/build/Debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -647,7 +647,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "E:/RM/RM_jie/Wheel-Infantry-Robots/build/Debug/CMakeFiles/pkgRedirects"
+			"value" : "E:/RM/jie/Wheel-Infantry-Robots/build/Debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -707,7 +707,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "E:/RM/RM_jie/Wheel-Infantry-Robots"
+			"value" : "E:/RM/jie/Wheel-Infantry-Robots"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1223,7 +1223,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "E:/RM/RM_jie/Wheel-Infantry-Robots/cmake/gcc-arm-none-eabi.cmake"
+			"value" : "E:/RM/jie/Wheel-Infantry-Robots/cmake/gcc-arm-none-eabi.cmake"
 		},
 		{
 			"name" : "CMAKE_VERBOSE_MAKEFILE",
@@ -1251,7 +1251,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "E:/RM/RM_jie/Wheel-Infantry-Robots/build/Debug"
+			"value" : "E:/RM/jie/Wheel-Infantry-Robots/build/Debug"
 		},
 		{
 			"name" : "jie_max_IS_TOP_LEVEL",
@@ -1275,7 +1275,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "E:/RM/RM_jie/Wheel-Infantry-Robots"
+			"value" : "E:/RM/jie/Wheel-Infantry-Robots"
 		}
 	],
 	"kind" : "cache",
