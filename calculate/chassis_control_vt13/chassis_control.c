@@ -19,18 +19,15 @@ extern uint8_t joint_enable_single;
 
 /* 底盘电机总线与实例 */
 static dj_motor_bus_t chassis_bus;
-static dj_motor_t chassis_motors[CHASSIS_MOTOR_COUNT];
+static dj_motor_t chassis_motors[4];
 
 /* 速度环 PID 实例 */
-static PIDInstance pid_speed[CHASSIS_MOTOR_COUNT];
+static PIDInstance pid_speed[4];
 
 /* 底盘状态与目标速度 */
 static chassis_control_state_t chassis_control_state_;
-static float motor_target_speed[CHASSIS_MOTOR_COUNT];
-static float torque_ff_current[CHASSIS_MOTOR_COUNT];
-#define CHASSIS_GRAVITY_N 20.0f
-#define CHASSIS_TORQUE_TO_CURRENT 1000.0f
-#define CHASSIS_WHEEL_RADIUS_M 0.076f
+static float motor_target_speed[4];
+static float torque_ff_current[4];
 
 /**
  * @brief 初始化底盘 CAN 总线与四个 M3508 电机
@@ -43,7 +40,7 @@ err_t chassis_control_init(void) {
     return NOT_FOUND;
   }
 
-  STM32CAN_t* can2 = STM32CAN_GetInstance(can_id);
+  STM32CAN_t *can2 = STM32CAN_GetInstance(can_id);
   if (can2 == NULL) {
     return PTR_NULL;
   }
@@ -63,24 +60,28 @@ err_t chassis_control_init(void) {
    * reversed 参数根据实际机械安装方向设置 */
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FL], &chassis_bus,
                          DJ_MOTOR_M3508, 4, false); /* 左前轮 = 4 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FR], &chassis_bus,
                          DJ_MOTOR_M3508, 3, false); /* 右前轮 = 3 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RL], &chassis_bus,
                          DJ_MOTOR_M3508, 2, false); /* 左后轮 = 2 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RR], &chassis_bus,
                          DJ_MOTOR_M3508, 1, false); /* 右后轮 = 1 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   return OK;
 }
 
-static void chassis_speed_pid_init_single(PIDInstance* pid, float kp, float ki,
+static void chassis_speed_pid_init_single(PIDInstance *pid, float kp, float ki,
                                           float kd, float max_out) {
   PIDInit(pid, kp, ki, kd, max_out, 3000.0f, 0.0f,
           PID_Integral_Limit | PID_Derivative_On_Measurement |
@@ -101,7 +102,8 @@ void chassis_speed_pid_init(void) {
 
 static void chassis_motor_pid_control_speed(uint8_t motor_index,
                                             float target_speed) {
-  if (motor_index >= CHASSIS_MOTOR_COUNT) return;
+  if (motor_index >= 4)
+    return;
 
   /* 获取电机反馈 */
   dj_motor_feedback_t feedback;
@@ -139,16 +141,16 @@ static void chassis_control(void) {
    *   +X：前
    *   +Y：左
    *   +Z：上
-  *   +wz：顺时针
+   *   +wz：顺时针
    *
    * VT13 左摇杆：l.x / l.y
    *   注意：这里保留当前遥控器通道的实际方向反号，
    *   只把它统一映射到机器人底盘坐标系。
    */
-  chassis_control_state_.command.vx = -vt13_cmd_rc.ch.l.y * 3000.0f;  // +X：前
-  chassis_control_state_.command.vy = -vt13_cmd_rc.ch.l.x * 3000.0f;  // +Y：左
+  chassis_control_state_.command.vx = -vt13_cmd_rc.ch.l.y * 3000.0f; // +X：前
+  chassis_control_state_.command.vy = -vt13_cmd_rc.ch.l.x * 3000.0f; // +Y：左
   chassis_control_state_.command.wz =
-      vt13_cmd_rc.ch.r.x * 3000.0f;  // +wz：顺时针
+      vt13_cmd_rc.ch.r.x * 3000.0f; // +wz：顺时针
 
   /*
    * 麦克纳姆轮逆运动学：
@@ -156,7 +158,7 @@ static void chassis_control(void) {
    *       +X：前
    *       +Y：左
    *       +Z：上
-  *       +wz：顺时针
+   *       +wz：顺时针
    *
    *             前（+X）
    *                ↑
@@ -174,7 +176,7 @@ static void chassis_control(void) {
       chassis_control_state_.command.wz, motor_target_speed);
 
   /* 执行速度环 PID 控制（写齐后自动发送 CAN 帧） */
-  for (uint8_t i = 0; i < CHASSIS_MOTOR_COUNT; i++) {
+  for (uint8_t i = 0; i < 4; i++) {
     chassis_motor_pid_control_speed(i, motor_target_speed[i]);
   }
 }

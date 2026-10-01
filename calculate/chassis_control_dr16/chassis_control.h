@@ -6,10 +6,6 @@
 #define CALUCATE_CHASSIS_CONTROL_H
 
 #include "comp_cmd.h"
-#include "main.h"
-
-/** 底盘电机数量（麦克纳姆轮四轮） */
-#define CHASSIS_MOTOR_COUNT (4U)
 
 /** 底盘电机索引枚举 */
 typedef enum {

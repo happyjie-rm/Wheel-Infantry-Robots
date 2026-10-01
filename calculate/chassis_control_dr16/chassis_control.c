@@ -16,24 +16,19 @@
 #include "process.h"
 
 /* DR16 task owns the decoded command and updates it periodically. */
-extern DR16_t* dr16;
-extern uint8_t joint_enable_single;
+extern DR16_t *dr16;
 
 /* 底盘电机总线与实例 */
 dj_motor_bus_t chassis_bus;
-dj_motor_t chassis_motors[CHASSIS_MOTOR_COUNT];
+dj_motor_t chassis_motors[4];
 
 /* 速度环 PID 实例 */
-static PIDInstance pid_speed[CHASSIS_MOTOR_COUNT];
+static PIDInstance pid_speed[4];
 
 /* 底盘状态与目标速度 */
 static chassis_control_state_t chassis_control_state_;
-static float motor_target_speed[CHASSIS_MOTOR_COUNT];
-static float torque_ff_current[CHASSIS_MOTOR_COUNT];
-#define CHASSIS_GRAVITY_N 20.0f
-#define CHASSIS_TORQUE_TO_CURRENT 1000.0f
-#define CHASSIS_WHEEL_RADIUS_M 0.076f
-#define CHASSIS_SMALL_GYRO_SPEED 1000.0f
+static float motor_target_speed[4];
+static float torque_ff_current[4];
 
 /**
  * @brief 初始化底盘 CAN 总线与四个 M3508 电机
@@ -46,7 +41,7 @@ err_t chassis_control_init(void) {
     return NOT_FOUND;
   }
 
-  STM32CAN_t* can2 = STM32CAN_GetInstance(can_id);
+  STM32CAN_t *can2 = STM32CAN_GetInstance(can_id);
   if (can2 == NULL) {
     return PTR_NULL;
   }
@@ -66,24 +61,28 @@ err_t chassis_control_init(void) {
    * reversed 参数根据实际机械安装方向设置 */
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FL], &chassis_bus,
                          DJ_MOTOR_M3508, 4, false); /* 左前轮 = 4 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FR], &chassis_bus,
                          DJ_MOTOR_M3508, 3, false); /* 右前轮 = 3 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RL], &chassis_bus,
                          DJ_MOTOR_M3508, 2, false); /* 左后轮 = 2 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RR], &chassis_bus,
                          DJ_MOTOR_M3508, 1, false); /* 右后轮 = 1 号 */
-  if (result != OK) return result;
+  if (result != OK)
+    return result;
 
   return OK;
 }
 
-static void chassis_speed_pid_init_single(PIDInstance* pid, float kp, float ki,
+static void chassis_speed_pid_init_single(PIDInstance *pid, float kp, float ki,
                                           float kd, float max_out) {
   PIDInit(pid, kp, ki, kd, max_out, 3000.0f, 0.0f,
           PID_Integral_Limit | PID_Derivative_On_Measurement |
@@ -104,7 +103,8 @@ void chassis_speed_pid_init(void) {
 
 static void chassis_motor_pid_control_speed(uint8_t motor_index,
                                             float target_speed) {
-  if (motor_index >= CHASSIS_MOTOR_COUNT) return;
+  if (motor_index >= 4)
+    return;
 
   /* 获取电机反馈 */
   dj_motor_feedback_t feedback;
@@ -136,7 +136,7 @@ static void chassis_stop(void) {
 }
 
 static void chassis_control(void) {
-  const cmd_rc_t* command = &dr16->dr16_cmd;
+  const cmd_rc_t *command = &dr16->dr16_cmd;
 
   chassis_dynamics_feedforward(torque_ff_current);
   /*
@@ -144,14 +144,14 @@ static void chassis_control(void) {
    *   +X：前
    *   +Y：左
    *   +Z：上
-  *   +wz：顺时针
+   *   +wz：顺时针
    *
    * DR16 左摇杆：l.x / l.y
    *   注意：这里保留当前遥控器通道的实际方向反号，
    *   只把它统一映射到机器人底盘坐标系。
    */
-  chassis_control_state_.command.vx = -command->ch.l.y * 3000.0f;  // +X：前
-  chassis_control_state_.command.vy = -command->ch.l.x * 3000.0f;  // +Y：左
+  chassis_control_state_.command.vx = -command->ch.l.y * 3000.0f; // +X：前
+  chassis_control_state_.command.vy = -command->ch.l.x * 3000.0f; // +Y：左
   chassis_control_state_.command.wz = command->ch.r.x * 3000.0f;  // +wz：顺时针
 
   /*
@@ -160,7 +160,7 @@ static void chassis_control(void) {
    *       +X：前
    *       +Y：左
    *       +Z：上
-  *       +wz：顺时针
+   *       +wz：顺时针
    *
    *             前（+X）
    *                ↑
@@ -178,7 +178,7 @@ static void chassis_control(void) {
       chassis_control_state_.command.wz, motor_target_speed);
 
   /* 执行速度环 PID 控制（写齐后自动发送 CAN 帧） */
-  for (uint8_t i = 0; i < CHASSIS_MOTOR_COUNT; i++) {
+  for (uint8_t i = 0; i < 4; i++) {
     chassis_motor_pid_control_speed(i, motor_target_speed[i]);
   }
 }
@@ -197,7 +197,7 @@ static void chassis_control(void) {
  *   wz = 固定小陀螺速度
  */
 static void chassis_small_gyro_control(void) {
-  const cmd_rc_t* command = &dr16->dr16_cmd;
+  const cmd_rc_t *command = &dr16->dr16_cmd;
 
   chassis_dynamics_feedforward(torque_ff_current);
 
@@ -213,13 +213,13 @@ static void chassis_small_gyro_control(void) {
   chassis_control_state_.command.vy = -command->ch.l.x * 5000.0f;
 
   /* 固定原地旋转速度：不动左摇杆时也会持续自转。 */
-  chassis_control_state_.command.wz = CHASSIS_SMALL_GYRO_SPEED;
+  chassis_control_state_.command.wz = 3000;
 
   chassis_dynamics_inverse(
       chassis_control_state_.command.vx, chassis_control_state_.command.vy,
       chassis_control_state_.command.wz, motor_target_speed);
 
-  for (uint8_t i = 0; i < CHASSIS_MOTOR_COUNT; i++) {
+  for (uint8_t i = 0; i < 4; i++) {
     chassis_motor_pid_control_speed(i, motor_target_speed[i]);
   }
 }
@@ -232,33 +232,12 @@ void Chassis_Mode(void) {
   }
 
   if (dr16->dr16_cmd.sw_l == CMD_SW_MID) {
-    /*
-     * MID：正常底盘模式
-     * 左摇杆 -> 前后/左右
-     * 右摇杆 -> 旋转
-     */
-    if (joint_enable_single == 1) {
-      chassis_control();
-    } else {
-      chassis_stop();
-    }
+
+    chassis_control();
+
   } else if (dr16->dr16_cmd.sw_l == CMD_SW_DOWN) {
-    /*
-     * DOWN：小陀螺模式
-     *
-     * 左摇杆仍然有效：
-     *   左摇杆前后 -> 底盘前后移动
-     *   左摇杆左右 -> 底盘左右移动
-     *
-     * 右摇杆不读取。
-     *
-     * 即使左摇杆完全回中：
-     *   vx = 0
-     *   vy = 0
-     *   wz = 固定 3000
-     * 底盘仍然持续原地旋转。
-     */
-    chassis_stop();
+
+    chassis_small_gyro_control();
   } else {
     /* UP 或异常状态：安全停止 */
     chassis_stop();
