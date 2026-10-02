@@ -35,8 +35,8 @@ static const CAN_FilterTypeDef can2_filter = {
 /* CAN2：底盘 M3508 与 DM IMU；CAN1：6 台 DM 关节电机。 */
 static STM32CAN_t can2_instance;
 static STM32CAN_t can1_instance;
-/* IMU 对象由本模块持有，任务通过 imu_can_device 指针访问。 */
-static IMUCAN_t imu_can_registration;
+/* IMU 对象由本模块持有，任务通过 getter 函数访问。 */
+static IMUCAN_t imu_can_instance;
 
 /**
  * @brief 统一检查初始化步骤的返回码。
@@ -69,7 +69,7 @@ err_t CAN_RegisterAllDevices(void) {
   err_t status;
 
   /* CAN2：IMU RX 回调 + 底盘总线回调 + 4 台 M3508。 */
-  status = imu_can_init(&imu_can_registration, &can2_instance, 0x01u, 0x11u);
+  status = imu_can_init(&imu_can_instance, &can2_instance, 0x01u, 0x11u);
   if (status != OK) {
     return status;
   }
@@ -78,9 +78,17 @@ err_t CAN_RegisterAllDevices(void) {
     return status;
   }
 
-  /* 让 IMU 任务使用已完成注册的对象，不在任务中重复初始化。 */
-  imu_can_device = &imu_can_registration;
   return OK;
+}
+
+/**
+ * @brief 获取 IMU CAN 设备对象指针。
+ *
+ * 供 IMU 任务访问已注册的设备对象，无需暴露全局变量。
+ * @return IMU 对象指针，若未初始化可能返回未就绪的对象。
+ */
+IMUCAN_t* can_device_get_imu(void) {
+  return &imu_can_instance;
 }
 
 /**

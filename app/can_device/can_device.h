@@ -1,6 +1,7 @@
 #pragma once
 
 #include "comp_cmd.h"
+#include "imu_can.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,6 +30,14 @@ err_t CAN_RegisterAllDevices(void);
  * @return OK 成功；否则为失败步骤返回的错误码。
  */
 err_t CAN_StartAll(void);
+
+/**
+ * @brief 获取 IMU CAN 设备对象指针。
+ *
+ * 供 IMU 任务访问已注册的设备对象，封装内部持有的对象。
+ * @return IMU 对象指针。
+ */
+IMUCAN_t* can_device_get_imu(void);
 
 #ifdef __cplusplus
 }
