@@ -1,5 +1,4 @@
-#ifndef __BSP_PWM_H__
-#define __BSP_PWM_H__
+#pragma once
 
 #include "comp_cmd.h"
 #include "comp_utils.h"
@@ -44,5 +43,3 @@ err_t STM32PWM_GetLastError(const STM32PWM_t* self);
 #ifdef __cplusplus
 }
 #endif
-
-#endif  // __BSP_PWM_H__

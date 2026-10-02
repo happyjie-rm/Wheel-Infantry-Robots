@@ -10,8 +10,7 @@
  *
  ******************************************************************************
  */
-#ifndef __PID_LOCATION_H
-#define __PID_LOCATION_H
+#pragma once
 
 #include "main.h"
 #include "memory.h"
@@ -158,5 +157,3 @@ PIDInstance* PIDRegister(float kp, float ki, float kd, float max_output,
  * @return float  PID计算输出
  */
 float PIDCalculate(PIDInstance* pid, float measure, float ref);
-
-#endif

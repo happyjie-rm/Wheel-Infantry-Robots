@@ -1,5 +1,4 @@
-#ifndef __BSP_UART_H__
-#define __BSP_UART_H__
+#pragma once
 
 #include "comp_cmd.h"
 #include "comp_utils.h"
@@ -196,6 +195,3 @@ void STM32UARTDoubleBufTx_HandleTxComplete(STM32UARTDoubleBufTx_t* self);
 #ifdef __cplusplus
 }
 #endif
-
-#endif
-// __BSP_UART_H__

@@ -2,8 +2,7 @@
   自定义的小工具
 */
 
-#ifndef COMP_UTILS_H
-#define COMP_UTILS_H
+#pragma once
 
 #include <float.h>
 #include <math.h>
@@ -184,4 +183,3 @@ void verify_failed(const char* file, uint32_t line);
 #ifdef __cplusplus
 }
 #endif
-#endif  // COMP_UTILS_H

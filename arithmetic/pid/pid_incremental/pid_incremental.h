@@ -5,8 +5,7 @@
  ******************************************************************************
  */
 
-#ifndef __PID_INCREMENTAL_H
-#define __PID_INCREMENTAL_H
+#pragma once
 
 // #include "arm_math.h"
 #include <math.h>
@@ -136,5 +135,3 @@ float PID_Get_Increment_jie(PIDInstance_jie* pid);
  * @param pid PID实例指针
  */
 void PID_Reset_jie(PIDInstance_jie* pid);
-
-#endif /* __JIE_H */

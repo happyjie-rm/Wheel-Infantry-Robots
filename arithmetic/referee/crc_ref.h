@@ -1,5 +1,4 @@
-#ifndef CRC_REF_H
-#define CRC_REF_H
+#pragma once
 
 #include <stdint.h>
 
@@ -39,5 +38,3 @@ uint32_t Verify_CRC16_Check_Sum(uint8_t* pchMessage, uint32_t dwLength);
 //! pchMessage 为空时返回 0xffffu，以保持原有防御性行为。
 uint16_t Get_CRC16_Check_Sum(uint8_t* pchMessage, uint32_t dwLength,
                              uint16_t wCRC);
-
-#endif

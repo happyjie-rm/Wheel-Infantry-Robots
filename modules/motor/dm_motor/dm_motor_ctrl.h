@@ -5,8 +5,8 @@
  * 本层管理六个电机对象，订阅 bsp_can 接收回调，并在中断回调中完成实时反馈解析和
  * 参数帧快照。任务上下文通过 read_all_motor_data() 推进参数轮询状态机。
  */
-#ifndef __DM_MOTOR_CTRL_H__
-#define __DM_MOTOR_CTRL_H__
+#pragma once
+
 #include "bsp_can.h"
 #include "convert.h"
 #include "dm_motor_drv.h"
@@ -153,5 +153,3 @@ float set_dm_motor_vel(int vel_int, float v_max, float v_min);
  * @return 还原后的浮点扭矩。
  */
 float set_dm_motor_tor(int tor_int, float t_max, float t_min);
-
-#endif /* __DM_MOTOR_CTRL_H__ */

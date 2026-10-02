@@ -1,5 +1,4 @@
-#ifndef __BSP_USB_H__
-#define __BSP_USB_H__
+#pragma once
 
 #include "comp_cmd.h"
 #include "main.h"
@@ -80,5 +79,3 @@ void STM32USB_HandleTxComplete(USBD_HandleTypeDef* usb_handle);
 #ifdef __cplusplus
 }
 #endif
-
-#endif  // __BSP_USB_H__

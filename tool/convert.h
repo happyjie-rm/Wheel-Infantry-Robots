@@ -1,5 +1,5 @@
-#ifndef CONVERT_H
-#define CONVERT_H
+#pragma once
+
 #include <stdint.h>
 // PI定义
 // #ifndef M_PI
@@ -23,5 +23,3 @@
 // 无符号整数转换函数
 int float_to_uint(float x_float, float x_min, float x_max, int bits);
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
-
-#endif

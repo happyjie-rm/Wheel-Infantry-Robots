@@ -1,5 +1,4 @@
-#ifndef __BSP_IIC_H__
-#define __BSP_IIC_H__
+#pragma once
 
 #include "comp_cmd.h"
 #include "comp_utils.h"
@@ -86,5 +85,3 @@ err_t STM32IIC_GetLastError(const STM32IIC_t* self);
 #ifdef __cplusplus
 }
 #endif
-
-#endif  // __BSP_IIC_H__

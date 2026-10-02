@@ -21,8 +21,7 @@
  * 发送失败时 pending 保留，返回 BSP 错误码；调用方可在下周期重写命令或
  * force_flush。ISR 只更新原始反馈整数，不做浮点与发送。
  */
-#ifndef DJ_MOTOR_CTRL_H
-#define DJ_MOTOR_CTRL_H
+#pragma once
 
 #include "dj_motor_def.h"
 #include "dj_motor_drv.h"
@@ -112,5 +111,3 @@ err_t dj_motor_get_feedback(const dj_motor_t *motor,
  */
 bool dj_motor_is_online(const dj_motor_t *motor, uint32_t now_tick,
                         uint32_t timeout_ticks);
-
-#endif /* DJ_MOTOR_CTRL_H */

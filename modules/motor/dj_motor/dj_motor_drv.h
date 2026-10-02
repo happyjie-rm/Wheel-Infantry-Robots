@@ -11,8 +11,7 @@
  * @note 本层不管理 group_mask / pending_mask，也不订阅 RX。
  *       拼包状态机与对象生命周期全部由 dj_motor_ctrl 负责。
  */
-#ifndef DJ_MOTOR_DRV_H
-#define DJ_MOTOR_DRV_H
+#pragma once
 
 #include "dj_motor_def.h"
 
@@ -109,5 +108,3 @@ uint8_t dj_motor_drv_group_index(dj_motor_group_e group);
  * @return 合法返回 true，否则 false。
  */
 bool dj_motor_drv_group_is_valid(dj_motor_group_e group);
-
-#endif /* DJ_MOTOR_DRV_H */

@@ -15,21 +15,20 @@
  * | GM6020 | 1–4 | 0x204 + ID | 0x1FF | ID - 1 |
  * | GM6020 | 5–7 | 0x204 + ID | 0x2FF | ID - 5 |
  *
- * GM6020 无设备 ID 8；其控制量为电压原始指令，限幅 ±30000，勿按“电流”理解。
+ * GM6020 无设备 ID 8；其控制量为电压原始指令，限幅 ±30000，勿按”电流”理解。
  *
  * ## 发送语义（写齐再发）
  *
  * 控制组维护 group_mask（已注册成员）与 pending_mask（本轮已写命令成员）。
  * 当两者相等时，ctrl 层打包 8 字节大端帧并通过 bsp_can 发送。安全停机请使用
- * dj_motor_zero_and_flush()，不要依赖“碰巧写齐”。
+ * dj_motor_zero_and_flush()，不要依赖”碰巧写齐”。
  *
  * @note 位置在反馈快照中单位为 rad；输出轴角速度单位为 rad/s；命令为协议原始
  *       int16_t。逻辑方向与物理方向由实例的 reversed 标志区分。
  */
-#ifndef DJ_MOTOR_DEF_H
-#define DJ_MOTOR_DEF_H
+#pragma once
 
-#include "bsp_can.h"
+#include “bsp_can.h”
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -181,5 +180,3 @@ struct dj_motor {
   uint32_t last_feedback_tick;          /**< 最近反馈时间戳 */
   bool feedback_valid;                  /**< 是否至少收过一帧合法反馈 */
 };
-
-#endif /* DJ_MOTOR_DEF_H */

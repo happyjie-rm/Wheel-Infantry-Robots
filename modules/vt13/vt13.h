@@ -1,5 +1,4 @@
-#ifndef _vt13_h
-#define _vt13_h
+#pragma once
 
 #include "comp_cmd.h"
 #include "comp_def.h"
@@ -107,5 +106,3 @@ bool vt13_wait_dma_cplt(uint32_t timeout);
 err_t vt13_parse_rc(const vt13_t *vt13, vt13_cmd_rc_t *rc);
 err_t vt13_cmd_rc_to_cmd_rc(const vt13_cmd_rc_t *vt13_rc, cmd_rc_t *rc);
 err_t vt13_handle_offline(const vt13_t *vt13, vt13_cmd_rc_t *rc);
-
-#endif

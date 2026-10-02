@@ -9,8 +9,8 @@
  * @note 位置、速度、扭矩等物理量在控制接口中分别按 rad、rad/s、N·m 使用；寄存器
  *       参数的实际量纲和有效范围以对应型号电机固件的寄存器手册为准。
  */
-#ifndef __DM_MOTOR_DEF_H__
-#define __DM_MOTOR_DEF_H__
+#pragma once
+
 #include "main.h"
 
 /**
@@ -122,6 +122,3 @@ typedef struct {
   motor_ctrl_t ctrl;   ///< 当前控制模式及目标值
   esc_inf_t tmp;       ///< 参数读取状态与驱动器寄存器镜像
 } motor_t;
-
-#endif
-/* __DM_MOTOR_DEF_H__ */

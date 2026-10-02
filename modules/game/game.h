@@ -1,5 +1,4 @@
-#ifndef __GAME_H__
-#define __GAME_H__
+#pragma once
 
 #include "FreeRTOS.h"
 #include "bsp_uart.h"
@@ -455,6 +454,4 @@ void Game_Update(Game_t *self, uint32_t timeout_ms);
 
 #if !defined(__GNUC__)
 #pragma pack(pop)
-#endif
-
 #endif

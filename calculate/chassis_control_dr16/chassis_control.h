@@ -2,8 +2,7 @@
  * @file chassis_control.h
  * @brief 麦克纳姆轮底盘控制接口
  */
-#ifndef CALUCATE_CHASSIS_CONTROL_H
-#define CALUCATE_CHASSIS_CONTROL_H
+#pragma once
 
 #include "comp_cmd.h"
 
@@ -43,5 +42,3 @@ void chassis_speed_pid_init(void);
  */
 /** 底盘模式控制（周期调用）。左下档进入 DR16 小陀螺模式。 */
 void Chassis_Mode(void);
-
-#endif /* CALUCATE_CHASSIS_CONTROL_H */

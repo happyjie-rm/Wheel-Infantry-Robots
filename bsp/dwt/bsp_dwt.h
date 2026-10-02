@@ -1,5 +1,4 @@
-#ifndef _BSP_DWT_H
-#define _BSP_DWT_H
+#pragma once
 
 #include "main.h"
 #include "stdint.h"
@@ -57,5 +56,3 @@ void DWT_Delay(float Delay);
 //! 更新软件时间轴，三个 timeline 读取函数都会调用它。
 //! 若长时间不读取 timeline，应手动调用以避免 CYCCNT 溢出后时间轴滞后。
 void DWT_SysTimeUpdate(void);
-
-#endif /* BSP_DWT_H_ */

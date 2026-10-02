@@ -1,5 +1,4 @@
-#ifndef DM_IMU_CAN_H
-#define DM_IMU_CAN_H
+#pragma once
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -100,5 +99,3 @@ void imu_request_gyro(void);
 void imu_request_euler(void);
 void imu_request_quat(void);
 void IMU_UpdateData(uint8_t* data);
-
-#endif

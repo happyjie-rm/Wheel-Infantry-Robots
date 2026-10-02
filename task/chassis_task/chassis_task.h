@@ -2,8 +2,7 @@
  * @file chassis_task.h
  * @brief 底盘控制任务头文件
  */
-#ifndef CHASSIS_TASK_H
-#define CHASSIS_TASK_H
+#pragma once
 
 #include "comp_cmd.h"
 
@@ -18,5 +17,3 @@ extern volatile err_t chassis_status;
  * @param argument FreeRTOS 任务参数（未使用）
  */
 void chassis_task(void* argument);
-
-#endif /* CHASSIS_TASK_H */

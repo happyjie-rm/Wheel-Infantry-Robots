@@ -1,5 +1,4 @@
-#ifndef BSP_CAN_H
-#define BSP_CAN_H
+#pragma once
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -216,6 +215,4 @@ err_t STM32CAN_GetLastError(const STM32CAN_t* self);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

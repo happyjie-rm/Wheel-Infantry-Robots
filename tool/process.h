@@ -1,5 +1,4 @@
-#ifndef TOOL_PROCESS_PROCESS_H_
-#define TOOL_PROCESS_PROCESS_H_
+#pragma once
 
 #include <stdint.h>
 
@@ -377,5 +376,3 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* TOOL_PROCESS_PROCESS_H_ */

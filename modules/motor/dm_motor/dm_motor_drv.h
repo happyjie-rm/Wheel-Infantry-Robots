@@ -5,8 +5,8 @@
  * 本层负责把电机控制目标编码为达妙协议帧，并通过 bsp_can 提供的 STM32CAN_t
  * 设备发送；同时提供实时反馈解码、特殊命令帧以及寄存器读写命令。
  */
-#ifndef __DM_MOTOR_DRV_H__
-#define __DM_MOTOR_DRV_H__
+#pragma once
+
 #include "bsp_can.h"
 #include "can.h"
 #include "convert.h"
@@ -214,5 +214,3 @@ void write_motor_data(STM32CAN_t *hcan, uint16_t id, uint8_t rid, uint8_t d0,
  * @param rid 为保持接口一致而保留的参数；当前协议帧固定发送保存选择值 0x01。
  */
 void save_motor_data(STM32CAN_t *hcan, uint16_t id, uint8_t rid);
-
-#endif /* __DM_MOTOR_DRV_H__ */

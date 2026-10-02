@@ -1,5 +1,4 @@
-#ifndef IMU_485_TASK_H
-#define IMU_485_TASK_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,5 +9,3 @@ void imu_485_task(void* argument);
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* IMU_485_TASK_H */

@@ -1,5 +1,4 @@
-#ifndef DM_IMU_RS485_H
-#define DM_IMU_RS485_H
+#pragma once
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -79,5 +78,3 @@ void imu_485_data_unpack(const uint8_t *pData);
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* DM_IMU_RS485_H */
