@@ -21,7 +21,7 @@ volatile err_t chassis_status = PENDING;
  *   2. 初始化底盘电机速度环 PID 参数
  *   3. 周期性调用底盘控制函数（2ms 周期）
  */
-void chassis_task(void* argument) {
+void chassis_task(void *argument) {
   RM_UNUSED(argument);
 
   /* CAN2 及底盘电机已由 main.c 完成注册和启动。 */

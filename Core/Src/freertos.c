@@ -124,6 +124,20 @@ const osThreadAttr_t game_attributes = {
   .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for shoot */
+osThreadId_t shootHandle;
+const osThreadAttr_t shoot_attributes = {
+  .name = "shoot",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityLow7,
+};
+/* Definitions for super_power */
+osThreadId_t super_powerHandle;
+const osThreadAttr_t super_power_attributes = {
+  .name = "super_power",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -141,6 +155,8 @@ void imu_485_task(void *argument);
 void gimbal_task(void *argument);
 void chassis_task(void *argument);
 void game_task(void *argument);
+void shoot_task(void *argument);
+void super_power_task(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -247,6 +263,12 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of game */
   gameHandle = osThreadNew(game_task, NULL, &game_attributes);
+
+  /* creation of shoot */
+  shootHandle = osThreadNew(shoot_task, NULL, &shoot_attributes);
+
+  /* creation of super_power */
+  super_powerHandle = osThreadNew(super_power_task, NULL, &super_power_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -454,6 +476,42 @@ __weak void game_task(void *argument)
     osDelay(1);
   }
   /* USER CODE END game_task */
+}
+
+/* USER CODE BEGIN Header_shoot_task */
+/**
+* @brief Function implementing the shoot thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_shoot_task */
+__weak void shoot_task(void *argument)
+{
+  /* USER CODE BEGIN shoot_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END shoot_task */
+}
+
+/* USER CODE BEGIN Header_super_power_task */
+/**
+* @brief Function implementing the super_power thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_super_power_task */
+__weak void super_power_task(void *argument)
+{
+  /* USER CODE BEGIN super_power_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END super_power_task */
 }
 
 /* Private application code --------------------------------------------------*/
