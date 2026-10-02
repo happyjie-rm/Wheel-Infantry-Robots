@@ -27,6 +27,9 @@ set(CMAKE_PROJECT_NAME jie_max)
 # Enable compile command to ease indexing with e.g. clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+# Enable verbose output for detailed build information
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # Core project settings
 project(${CMAKE_PROJECT_NAME})
 message("Build type: " ${CMAKE_BUILD_TYPE})
