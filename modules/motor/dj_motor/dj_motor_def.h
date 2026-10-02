@@ -41,8 +41,8 @@
 #define DJ_MOTOR_BUS_CAPACITY (8U)
 /** 每个控制帧容纳的电机槽位数（每槽 2 字节大端 int16） */
 #define DJ_MOTOR_GROUP_SLOT_COUNT (4U)
-/** 控制组数量：0x200、0x1FF、0x2FF 各一组 */
-#define DJ_MOTOR_GROUP_COUNT (3U)
+/** 控制组数量：0x200、0x1FE、0x1FF、0x2FE、0x2FF 各一组 */
+#define DJ_MOTOR_GROUP_COUNT (5U)
 /** 编码器一圈分辨率（圈内原始值 0..8191） */
 #define DJ_MOTOR_ENCODER_RESOLUTION (8192U)
 /** M3508 / C620 电流指令绝对值限幅（协议原始值，非物理安培） */
@@ -78,7 +78,9 @@ typedef enum {
  */
 typedef enum {
   DJ_MOTOR_GROUP_200 = 0x200, /**< M3508/M2006 设备 ID 1–4 */
+  DJ_MOTOR_GROUP_1FE = 0x1FE, /**< 扩展控制组 */
   DJ_MOTOR_GROUP_1FF = 0x1FF, /**< M3508/M2006 ID 5–8，或 GM6020 ID 1–4 */
+  DJ_MOTOR_GROUP_2FE = 0x2FE, /**< 扩展控制组 */
   DJ_MOTOR_GROUP_2FF = 0x2FF  /**< GM6020 设备 ID 5–7 */
 } dj_motor_group_e;
 
@@ -156,7 +158,7 @@ typedef struct {
 typedef struct {
   STM32CAN_t *can;           /**< 绑定的 BSP CAN 设备，不可为 NULL */
   dj_motor_t *motors[DJ_MOTOR_BUS_CAPACITY]; /**< 注册顺序保存的电机指针表 */
-  dj_motor_group_state_t groups[DJ_MOTOR_GROUP_COUNT]; /**< 0:0x200 1:0x1FF 2:0x2FF */
+  dj_motor_group_state_t groups[DJ_MOTOR_GROUP_COUNT]; /**< 0:0x200 1:0x1FE 2:0x1FF 3:0x2FE 4:0x2FF */
   uint8_t motor_count;       /**< 当前已注册电机数量，0..CAPACITY */
   bool initialized;          /**< true 表示 bus_init 已成功 */
 } dj_motor_bus_t;
