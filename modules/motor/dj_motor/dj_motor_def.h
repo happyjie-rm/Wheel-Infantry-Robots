@@ -28,7 +28,7 @@
  */
 #pragma once
 
-#include “bsp_can.h”
+#include "bsp_can.h"
 
 #include <stdbool.h>
 #include <stdint.h>
