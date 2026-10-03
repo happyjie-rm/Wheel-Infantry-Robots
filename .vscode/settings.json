@@ -11,5 +11,6 @@
         "starm-clangd",
         "--query-driver=${env:CUBE_BUNDLE_PATH}/gnu-tools-for-stm32/13.3.1+st.9/bin/arm-none-eabi-gcc*",
         "--query-driver=${env:CUBE_BUNDLE_PATH}/gnu-tools-for-stm32/13.3.1+st.9/bin/arm-none-eabi-g++*"
-    ]
+    ],
+    "emberprobe.openocdPath": "e:\\RM\\RM\\xpack-openocd-0.12.0-7-win32-x64\\xpack-openocd-0.12.0-7\\bin\\openocd.exe"
 }
