@@ -25,6 +25,9 @@ dj_motor_t chassis_motors[4];
 /* 速度环 PID 实例 */
 static PIDInstance pid_speed[4];
 
+static err_t chassis_bus_init_result;
+static err_t chassis_init_result[4];
+
 /* 底盘状态与目标速度 */
 static chassis_control_state_t chassis_control_state_;
 static float motor_target_speed[4];
@@ -47,9 +50,9 @@ err_t chassis_control_init(void) {
   }
 
   /* 初始化底盘总线 */
-  err_t result = dj_motor_bus_init(&chassis_bus, can2);
-  if (result != OK) {
-    return result;
+  chassis_bus_init_result = dj_motor_bus_init(&chassis_bus, can2);
+  if (chassis_bus_init_result != OK) {
+    return chassis_bus_init_result;
   }
 
   /* 初始化四个 M3508 底盘电机（控制组 0x200）
@@ -59,25 +62,29 @@ err_t chassis_control_init(void) {
    *   左后轮 RL = 2 号电机
    *   右后轮 RR = 1 号电机
    * reversed 参数根据实际机械安装方向设置 */
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FL], &chassis_bus,
-                         DJ_MOTOR_M3508, 4, false); /* 左前轮 = 4 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[0] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FL], &chassis_bus,
+                    DJ_MOTOR_M3508, 4, false); /* 左前轮 = 4 号 */
+  if (chassis_init_result[0] != OK)
+    return chassis_init_result[0];
 
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FR], &chassis_bus,
-                         DJ_MOTOR_M3508, 3, false); /* 右前轮 = 3 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[1] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FR], &chassis_bus,
+                    DJ_MOTOR_M3508, 3, false); /* 右前轮 = 3 号 */
+  if (chassis_init_result[1] != OK)
+    return chassis_init_result[1];
 
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RL], &chassis_bus,
-                         DJ_MOTOR_M3508, 2, false); /* 左后轮 = 2 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[2] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RL], &chassis_bus,
+                    DJ_MOTOR_M3508, 2, false); /* 左后轮 = 2 号 */
+  if (chassis_init_result[2] != OK)
+    return chassis_init_result[2];
 
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RR], &chassis_bus,
-                         DJ_MOTOR_M3508, 1, false); /* 右后轮 = 1 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[3] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RR], &chassis_bus,
+                    DJ_MOTOR_M3508, 1, false); /* 右后轮 = 1 号 */
+  if (chassis_init_result[3] != OK)
+    return chassis_init_result[3];
 
   return OK;
 }
