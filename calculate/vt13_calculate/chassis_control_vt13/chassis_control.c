@@ -5,6 +5,7 @@
 #include "chassis_control.h"
 
 #include <math.h>
+#include <stdbool.h>
 
 #include "bsp_can.h"
 #include "can.h"
@@ -14,15 +15,18 @@
 #include "process.h"
 #include "vt13.h"
 
-extern vt13_cmd_rc_t vt13_cmd_rc;
-extern uint8_t joint_enable_single;
+/* VT13 task owns the decoded command and updates it periodically. */
+extern vt13_t *vt13;
 
 /* 底盘电机总线与实例 */
-static dj_motor_bus_t chassis_bus;
-static dj_motor_t chassis_motors[4];
+dj_motor_bus_t chassis_bus;
+dj_motor_t chassis_motors[4];
 
 /* 速度环 PID 实例 */
 static PIDInstance pid_speed[4];
+
+static err_t chassis_bus_init_result;
+static err_t chassis_init_result[4];
 
 /* 底盘状态与目标速度 */
 static chassis_control_state_t chassis_control_state_;
@@ -46,9 +50,9 @@ err_t chassis_control_init(void) {
   }
 
   /* 初始化底盘总线 */
-  err_t result = dj_motor_bus_init(&chassis_bus, can2);
-  if (result != OK) {
-    return result;
+  chassis_bus_init_result = dj_motor_bus_init(&chassis_bus, can2);
+  if (chassis_bus_init_result != OK) {
+    return chassis_bus_init_result;
   }
 
   /* 初始化四个 M3508 底盘电机（控制组 0x200）
@@ -58,25 +62,29 @@ err_t chassis_control_init(void) {
    *   左后轮 RL = 2 号电机
    *   右后轮 RR = 1 号电机
    * reversed 参数根据实际机械安装方向设置 */
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FL], &chassis_bus,
-                         DJ_MOTOR_M3508, 4, false); /* 左前轮 = 4 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[0] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FL], &chassis_bus,
+                    DJ_MOTOR_M3508, 4, false); /* 左前轮 = 4 号 */
+  if (chassis_init_result[0] != OK)
+    return chassis_init_result[0];
 
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FR], &chassis_bus,
-                         DJ_MOTOR_M3508, 3, false); /* 右前轮 = 3 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[1] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_FR], &chassis_bus,
+                    DJ_MOTOR_M3508, 3, false); /* 右前轮 = 3 号 */
+  if (chassis_init_result[1] != OK)
+    return chassis_init_result[1];
 
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RL], &chassis_bus,
-                         DJ_MOTOR_M3508, 2, false); /* 左后轮 = 2 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[2] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RL], &chassis_bus,
+                    DJ_MOTOR_M3508, 2, false); /* 左后轮 = 2 号 */
+  if (chassis_init_result[2] != OK)
+    return chassis_init_result[2];
 
-  result = dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RR], &chassis_bus,
-                         DJ_MOTOR_M3508, 1, false); /* 右后轮 = 1 号 */
-  if (result != OK)
-    return result;
+  chassis_init_result[3] =
+      dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RR], &chassis_bus,
+                    DJ_MOTOR_M3508, 1, false); /* 右后轮 = 1 号 */
+  if (chassis_init_result[3] != OK)
+    return chassis_init_result[3];
 
   return OK;
 }
@@ -135,6 +143,8 @@ static void chassis_stop(void) {
 }
 
 static void chassis_control(void) {
+  const vt13_cmd_rc_t *command = &vt13->cmd;
+
   chassis_dynamics_feedforward(torque_ff_current);
   /*
    * 统一底盘坐标系：
@@ -147,10 +157,9 @@ static void chassis_control(void) {
    *   注意：这里保留当前遥控器通道的实际方向反号，
    *   只把它统一映射到机器人底盘坐标系。
    */
-  chassis_control_state_.command.vx = -vt13_cmd_rc.ch.l.y * 3000.0f; // +X：前
-  chassis_control_state_.command.vy = -vt13_cmd_rc.ch.l.x * 3000.0f; // +Y：左
-  chassis_control_state_.command.wz =
-      vt13_cmd_rc.ch.r.x * 3000.0f; // +wz：顺时针
+  chassis_control_state_.command.vx = -command->ch.l.y * 3000.0f; // +X：前
+  chassis_control_state_.command.vy = -command->ch.l.x * 3000.0f; // +Y：左
+  chassis_control_state_.command.wz = command->ch.r.x * 3000.0f;  // +wz：顺时针
 
   /*
    * 麦克纳姆轮逆运动学：
@@ -182,12 +191,18 @@ static void chassis_control(void) {
 }
 
 void Chassis_Mode(void) {
-  if (vt13_cmd_rc.mode_sw == vt13_CMD_SW_MID) {
-    if (joint_enable_single == 1) {
-      chassis_control();
-    }
-  } else if (vt13_cmd_rc.mode_sw == vt13_CMD_SW_UP ||
-             vt13_cmd_rc.mode_sw == vt13_CMD_SW_DOWN) {
+  /* 接收机掉线：底盘必须停止 */
+  if ((vt13 == NULL) || !vt13->online_) {
+    chassis_stop();
+    return;
+  }
+
+  if (vt13->cmd.mode_sw == vt13_CMD_SW_MID) {
+
+    chassis_control();
+
+  } else {
+    /* UP/DOWN 或异常状态：安全停止 */
     chassis_stop();
   }
 }

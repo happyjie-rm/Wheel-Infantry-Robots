@@ -7,11 +7,10 @@
 ## 文件结构
 
 ```
-calculate/chassis_control/
+calculate/vt13_calculate/chassis_control_vt13/
 ├── chassis_control.h       # 公开接口
 ├── chassis_control.c       # 实现
-├── ADAPTATION.md          # 详细适配说明
-└── README.md              # 本文件
+└── README.md               # 本文件
 ```
 
 ## 快速集成
@@ -31,26 +30,26 @@ int main(void) {
   /* 1. HAL 初始化 */
   HAL_Init();
   SystemClock_Config();
-  
+
   /* 2. 外设初始化 */
   MX_CAN2_Init();
-  
+
   /* 3. BSP CAN 初始化 */
   STM32CAN_Init(&can2_instance, &hcan2);
-  
+
   /* 4. 底盘控制模块初始化（必须在 CAN Start 之前） */
   err_t result = chassis_control_init();
   if (result != OK) {
     // 错误处理
     Error_Handler();
   }
-  
+
   /* 5. PID 参数初始化 */
   chassis_speed_pid_init();
-  
+
   /* 6. 启动 CAN（之后不能再注册新电机） */
   STM32CAN_Start(&can2_instance);
-  
+
   /* 7. 启动 RTOS 或进入主循环 */
   osKernelStart();
 }
@@ -63,12 +62,12 @@ int main(void) {
 ```c
 void ChassisControlTask(void *argument) {
   const TickType_t period = pdMS_TO_TICKS(2);  // 2ms 控制周期
-  
+
   TickType_t last_wake = xTaskGetTickCount();
-  
+
   for (;;) {
     Chassis_Mode();  // 根据遥控器模式控制底盘
-    
+
     vTaskDelayUntil(&last_wake, period);
   }
 }
@@ -96,11 +95,12 @@ void ChassisControlTask(void *argument) {
 
 ### `void Chassis_Mode(void)`
 
-底盘模式控制函数，根据遥控器模式开关控制底盘运动。
+底盘模式控制函数，根据 VT13 遥控器的在线状态与模式开关控制底盘运动。
 
 **控制逻辑：**
-- 模式开关在中档 + `joint_enable_single == 1`：正常控制
-- 模式开关在上档或下档：停止底盘
+- 遥控器离线：立即停止底盘
+- 模式开关在中档：正常控制
+- 模式开关在上档、下档或异常状态：停止底盘
 
 **调用时机：** 在控制任务中周期调用（推荐 2-5ms）
 
@@ -136,13 +136,13 @@ dj_motor_init(&chassis_motors[CHASSIS_MOTOR_RL], &chassis_bus,
 void chassis_speed_pid_init(void) {
   // FL: Kp=12, Ki=0, Kd=0, MaxOut=12000
   chassis_speed_pid_init_single(&pid_speed[CHASSIS_MOTOR_FL], 12.0f, 0.0f, 0.0f, 12000.0f);
-  
+
   // FR: Kp=8, Ki=0, Kd=0, MaxOut=12000
   chassis_speed_pid_init_single(&pid_speed[CHASSIS_MOTOR_FR], 8.0f, 0.0f, 0.0f, 12000.0f);
-  
+
   // RL: Kp=8, Ki=0, Kd=0, MaxOut=12000
   chassis_speed_pid_init_single(&pid_speed[CHASSIS_MOTOR_RL], 8.0f, 0.0f, 0.0f, 12000.0f);
-  
+
   // RR: Kp=14, Ki=2, Kd=0, MaxOut=12000
   chassis_speed_pid_init_single(&pid_speed[CHASSIS_MOTOR_RR], 14.0f, 2.0f, 0.0f, 12000.0f);
 }
@@ -188,8 +188,8 @@ VT13 上档或下档时底盘停止；当前 VT13 实现没有小陀螺分支。
 ### 问题：底盘不动
 
 **检查项：**
-1. 遥控器模式开关是否在中档
-2. `joint_enable_single` 是否为 1
+1. 遥控器是否在线（`vt13->online_` 为 `true`）
+2. 遥控器模式开关是否在中档
 3. 电机是否在线（使用 `dj_motor_is_online()` 检测）
 4. CAN 总线连接是否正常
 
@@ -215,7 +215,7 @@ static void chassis_control(void) {
       return;
     }
   }
-  
+
   /* 正常控制逻辑 */
   // ...
 }
@@ -225,26 +225,22 @@ static void chassis_control(void) {
 
 ```c
 static void chassis_control(void) {
-  chassis_control_state_.command.vx = -vt13_cmd_rc.ch.l.y * 3000;
-  chassis_control_state_.command.vy = -vt13_cmd_rc.ch.l.x * 3000;
-  chassis_control_state_.command.wz = vt13_cmd_rc.ch.r.x * 3000;
-  
+  chassis_control_state_.command.vx = -vt13->cmd.ch.l.y * 3000;
+  chassis_control_state_.command.vy = -vt13->cmd.ch.l.x * 3000;
+  chassis_control_state_.command.wz = vt13->cmd.ch.r.x * 3000;
+
   /* 限制最大速度 */
   const float max_linear_speed = 5000.0f;
   const float max_angular_speed = 3000.0f;
-  
+
   chassis_control_state_.command.vx = CONSTRAIN(chassis_control_state_.command.vx,
                                                  -max_linear_speed, max_linear_speed);
   chassis_control_state_.command.vy = CONSTRAIN(chassis_control_state_.command.vy,
                                                  -max_linear_speed, max_linear_speed);
   chassis_control_state_.command.wz = CONSTRAIN(chassis_control_state_.command.wz,
                                                  -max_angular_speed, max_angular_speed);
-  
+
   /* 运动学解算 */
   // ...
 }
 ```
-
-## 更多信息
-
-详细的适配说明和 API 对照请参考 [ADAPTATION.md](ADAPTATION.md)。
